@@ -21,3 +21,5 @@ If you have any good idea to work on machine transloation or Fake news detection
     <img src="https://road-to-kaggle-grandmaster.vercel.app/api/badges/bhuvanchennoju/discussion/light">
   </div>
 </div>
+
+![Hackerrank](https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white)
