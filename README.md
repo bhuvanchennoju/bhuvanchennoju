@@ -1,4 +1,4 @@
-# Welcome to Bhuvan's Homepage
+
 
 <h1 align="center">I'm Bhuvan Chennoju</h1>
 <h3 align="center">Deep Learning | Generative Modeling | Technical Writing | MLOps </h3>
