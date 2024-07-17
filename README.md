@@ -16,7 +16,7 @@
 
 - 👯 I’m looking to collaborate on **new projects and research projects**
 
-- 👨‍💻 All of my projects are available at [bhvuanchennoju.github.io](bhvuanchennoju.github.io)
+- 👨‍💻 All of my projects are available at [bhuvanchennoju.github.io](bhvuanchennoju.github.io)
 
 - 📝 I regularly write articles on [https://medium.com/@bhuvankumarchennoju](https://medium.com/@bhuvankumarchennoju)
 
