@@ -5,7 +5,7 @@
   </a>
 </p>
 
-<h1 align="center">Hi there! 👋 I'm Bhuvan Chennoju</h1>
+<h1 align="center">Hi there! I'm Bhuvan, Thanks for visiting!</h1>
 <h3 align="center">Data Scientist | AI Researcher | Python Enthusiast</h3>
 <img align="right" alt="Coding" width="400" src="https://github.com/bhuvanchennoju/bhuvanchennoju/blob/master/profileanimation.gif?raw=true">
 
