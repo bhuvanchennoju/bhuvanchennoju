@@ -11,20 +11,20 @@
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=bhuvanchennoju&label=Profile%20views&color=0e75b6&style=flat" alt="bhuvanchennoju" /> </p>
 
-Hey, I'm Bhuvan, a passionate Data Scientist specializing in AI and machine learning. With over 4 years of hands-on experience, I thrive on tackling complex data problems and crafting innovative solutions. Currently, I'm diving deep into the world of Large Language Models (LLMs), exploring their applications in natural language processing and beyond.
+Hey, I'm Bhuvan, a passionate Data Scientist specializing in AI and machine learning. With over 5 years of hands-on experience, I am interested in tackling challenges in AI research and writing efficient code. Currently, I'm diving deep into the world of Large Language Models (LLMs), exploring their applications in natural language processing and beyond.
 
 ### What I'm up to:
 
-- 🔭 Exploring the potential of Large Language Models (LLMs) in enhancing AI capabilities.
-- 👯 Open to collaborating on exciting new projects and research initiatives.
-- 📝 Writing insightful articles on [Medium](https://medium.com/@bhuvankumarchennoju) to share my knowledge and discoveries.
+- 🔭 Exploring the potential of Large Language Models (LLMs) and Agentic systems.
+- 👯 Open to collaborating on exciting ML, DL, and GenAI projects and research initiatives.
+- 📝 Recently started to write articles on [Medium](https://medium.com/@bhuvankumarchennoju) to share my knowledge.
 - 🌐 Sharing my projects and experiments on [my GitHub page](https://bhuvanchennoju.github.io).
 
 ### Get in Touch:
 
 - 📫 Feel free to drop me a line at **bhuvankumarchennoju@gmail.com**. Let's connect and discuss AI, data science, or anything tech-related!
 
-I'm always curious about the next big challenge in AI and eager to contribute to impactful projects. Let's innovate together!
+I'm always curious about the next big challenge in AI and eager to contribute to impactful projects.
 
 
 <h3 align="left">Connect with me:</h3>
