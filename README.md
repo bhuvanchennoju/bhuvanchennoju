@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://desired-link.com">
+  <a href="https://bhuvanchennoju.github.io/">
 <!--     <img src="https://github.com/bhuvanchennoju/bhuvanchennoju/blob/master/header2_cropped.gif?raw=true" alt="MasterHead"> -->
     <img src="https://github.com/bhuvanchennoju/bhuvanchennoju/blob/master/masterheader.gif?raw=true" width="1000" height="200"  alt = "MasterHead" />
   </a>
@@ -22,7 +22,7 @@ Hey, I'm Bhuvan, a passionate Data Scientist specializing in AI and machine lear
 
 ### Get in Touch:
 
-- 📫 Feel free to drop me a line at **bhuvankumarchennoju@gmail.com**. Let's connect and discuss AI, data science, or anything tech-related!
+- 📫 Feel free to drop me a line at **bhuvankumarchennoju@gmail.com**. Let's connect and discuss AI, data science, or anything tech-related! One of my goals for this year is to contribute to open source projects. 
 
 I'm always curious about the next big challenge in AI and eager to contribute to impactful projects.
 
