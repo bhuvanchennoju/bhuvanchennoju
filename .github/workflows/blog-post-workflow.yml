@@ -17,4 +17,6 @@ jobs:
       # just using the sample from github
         uses: gautamkrishnar/blog-post-workflow@v1 
         with:
-          feed_list: "https://medium.com/feed/@bhuvanchennoju"
+          #feed_list: "https://medium.com/feed/@bhuvanchennoju"
+          feed_list: "https://dev.to/feed/gautamkrishnar"
+
