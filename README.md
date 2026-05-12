@@ -10,7 +10,8 @@ Building production ML systems at T-Mobile — fraud detection, LLM agents, and 
 
 ### Now
 
-Working on a MILP-based least-cost routing system across a $3.35B/month transaction portfolio — backtesting against real data, targeting $8M in annual savings. Also deep in a writing series on LLM serving infrastructure: how autoregressive decoding shapes system design, where KV cache fits, what breaks at scale.
+<!-- NOW:START -->
+<!-- NOW:END -->
 
 ### Recently
 

@@ -1,3 +1,4 @@
+import json
 import re
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -10,11 +11,14 @@ FEEDS = [
     "https://bhuvanchennoju.com/rss.xml",
     "https://medium.com/feed/@bhuvanchennoju",
 ]
+NOW_API = "https://bcwebsite.onrender.com/site-content/home_now"
 MAX_POSTS = 5
 DUPE_THRESHOLD = 0.6
 README = "README.md"
 START = "<!-- BLOG-POST-LIST:START -->"
 END = "<!-- BLOG-POST-LIST:END -->"
+NOW_START = "<!-- NOW:START -->"
+NOW_END = "<!-- NOW:END -->"
 
 STOPWORDS = {"a", "an", "the", "how", "do", "you", "to", "for", "of",
              "in", "on", "at", "is", "it", "vs", "and", "or", "with"}
@@ -36,6 +40,17 @@ def is_duplicate(title: str, seen_titles: list[str]) -> bool:
         SequenceMatcher(None, kw, key_words(t)).ratio() >= DUPE_THRESHOLD
         for t in seen_titles
     )
+
+
+def fetch_now() -> str | None:
+    req = urllib.request.Request(NOW_API, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read())
+        return data.get("content", "").replace("\r\n", "\n").strip()
+    except Exception as exc:
+        print(f"warning: could not fetch now content: {exc}")
+        return None
 
 
 def fetch_posts(feed_url: str) -> list[dict]:
@@ -82,6 +97,18 @@ updated = re.sub(
     content,
     flags=re.DOTALL,
 )
+
+now_text = fetch_now()
+if now_text:
+    updated = re.sub(
+        rf"{re.escape(NOW_START)}.*?{re.escape(NOW_END)}",
+        f"{NOW_START}\n{now_text}\n{NOW_END}",
+        updated,
+        flags=re.DOTALL,
+    )
+    print("updated now section")
+else:
+    print("skipped now section (api unavailable)")
 
 with open(README, "w") as f:
     f.write(updated)
