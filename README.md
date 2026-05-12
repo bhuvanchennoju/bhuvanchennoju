@@ -25,7 +25,7 @@ Working on a MILP-based least-cost routing system across a $3.35B/month transact
 <!-- BLOG-POST-LIST:START -->
 - [Autoregressive Decoding: The Loop That Determines Your Serving Architecture](https://bhuvanchennoju.com/posts/autoregressive-decoding-the-loop-that-determines-your-serving-architecture)
 - [KV Cache: Intuition, Implementation, Production](https://bhuvanchennoju.com/posts/kv-cache-intuition-implementation-production)
-- [How do you build a local RAG system for private document interaction?](https://bhuvanchennoju.medium.com/how-do-you-build-a-local-rag-system-for-private-document-interaction-a3d81d9dcefc)
 - [Building a Local RAG System for Private Document Interaction](https://bhuvanchennoju.com/posts/local-rag-private-documents)
-- [RAG: How to Make a Base LLM Context-Aware on Private Data??](https://bhuvanchennoju.medium.com/rag-how-to-make-a-base-llm-context-aware-on-private-data-de16688d78b9)
+- [RAG vs Fine-tuning: How to Make a Base LLM Context-Aware](https://bhuvanchennoju.com/posts/rag-vs-finetuning)
+- [Asynchronous Data Scraper: NeurIPS Conference Data Curation Project](https://bhuvanchennoju.medium.com/asynchronous-data-scraper-neurips-conference-data-curation-project-ac2b7a816d6c)
 <!-- BLOG-POST-LIST:END -->
