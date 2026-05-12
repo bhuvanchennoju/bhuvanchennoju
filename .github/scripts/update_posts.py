@@ -2,6 +2,7 @@ import re
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
+from difflib import SequenceMatcher
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse, urlunparse
 
@@ -10,14 +11,31 @@ FEEDS = [
     "https://medium.com/feed/@bhuvanchennoju",
 ]
 MAX_POSTS = 5
+DUPE_THRESHOLD = 0.6
 README = "README.md"
 START = "<!-- BLOG-POST-LIST:START -->"
 END = "<!-- BLOG-POST-LIST:END -->"
+
+STOPWORDS = {"a", "an", "the", "how", "do", "you", "to", "for", "of",
+             "in", "on", "at", "is", "it", "vs", "and", "or", "with"}
 
 
 def clean_url(url: str) -> str:
     parsed = urlparse(url)
     return urlunparse(parsed._replace(query="", fragment=""))
+
+
+def key_words(title: str) -> str:
+    words = re.sub(r"\W+", " ", title.lower()).split()
+    return " ".join(w for w in words if w not in STOPWORDS)
+
+
+def is_duplicate(title: str, seen_titles: list[str]) -> bool:
+    kw = key_words(title)
+    return any(
+        SequenceMatcher(None, kw, key_words(t)).ratio() >= DUPE_THRESHOLD
+        for t in seen_titles
+    )
 
 
 def fetch_posts(feed_url: str) -> list[dict]:
@@ -40,19 +58,14 @@ def fetch_posts(feed_url: str) -> list[dict]:
     return posts
 
 
-def normalize(title: str) -> str:
-    return re.sub(r"\W+", "", title.lower())
-
-
 all_posts: list[dict] = []
-seen: set[str] = set()
+seen_titles: list[str] = []
 
 for url in FEEDS:
     try:
         for post in fetch_posts(url):
-            key = normalize(post["title"])
-            if key not in seen:
-                seen.add(key)
+            if not is_duplicate(post["title"], seen_titles):
+                seen_titles.append(post["title"])
                 all_posts.append(post)
     except Exception as exc:
         print(f"warning: could not fetch {url}: {exc}")
