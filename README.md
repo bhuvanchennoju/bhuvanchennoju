@@ -18,9 +18,8 @@ Nights and weekends: writing what I learn, experimenting with Claude Code, and r
 
 ### Recently
 
-- Launched [bhuvanchennoju.com](https://bhuvanchennoju.com) — full-stack with Next.js 14, FastAPI, and Postgres on Neon; production-grade architecture end-to-end
-- Designed an LLM-as-judge agent to triage ML-flagged accounts in the human review queue — Azure OpenAI with MLflow tracing for evaluation and drift monitoring
-- Built a threat intelligence NLP pipeline: HDBSCAN clustering, topic modeling, LLM enrichment, and graph linkage across 1–2M messages per day
+<!-- RECENTLY:START -->
+<!-- RECENTLY:END -->
 
 ---
 

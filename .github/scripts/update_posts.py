@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -7,22 +8,32 @@ from difflib import SequenceMatcher
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse, urlunparse
 
+GITHUB_USER = "bhuvanchennoju"
 FEEDS = [
     "https://bhuvanchennoju.com/rss.xml",
     "https://medium.com/feed/@bhuvanchennoju",
 ]
 NOW_API = "https://bcwebsite.onrender.com/site-content/home_now"
 MAX_POSTS = 5
+MAX_ACTIVITY = 5
 DUPE_THRESHOLD = 0.6
 README = "README.md"
-START = "<!-- BLOG-POST-LIST:START -->"
-END = "<!-- BLOG-POST-LIST:END -->"
-NOW_START = "<!-- NOW:START -->"
-NOW_END = "<!-- NOW:END -->"
+
+START       = "<!-- BLOG-POST-LIST:START -->"
+END         = "<!-- BLOG-POST-LIST:END -->"
+NOW_START   = "<!-- NOW:START -->"
+NOW_END     = "<!-- NOW:END -->"
+REC_START   = "<!-- RECENTLY:START -->"
+REC_END     = "<!-- RECENTLY:END -->"
 
 STOPWORDS = {"a", "an", "the", "how", "do", "you", "to", "for", "of",
              "in", "on", "at", "is", "it", "vs", "and", "or", "with"}
 
+SKIP_EVENTS = {"WatchEvent", "ForkEvent", "IssueCommentEvent",
+               "MemberEvent", "PublicEvent", "DeleteEvent"}
+
+
+# ── helpers ──────────────────────────────────────────────────────────────────
 
 def clean_url(url: str) -> str:
     parsed = urlparse(url)
@@ -34,13 +45,24 @@ def key_words(title: str) -> str:
     return " ".join(w for w in words if w not in STOPWORDS)
 
 
-def is_duplicate(title: str, seen_titles: list[str]) -> bool:
+def is_duplicate(title: str, seen: list[str]) -> bool:
     kw = key_words(title)
     return any(
         SequenceMatcher(None, kw, key_words(t)).ratio() >= DUPE_THRESHOLD
-        for t in seen_titles
+        for t in seen
     )
 
+
+def gh_request(url: str, token: str | None) -> bytes:
+    headers = {"User-Agent": "Mozilla/5.0", "Accept": "application/vnd.github+json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    req = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        return resp.read()
+
+
+# ── now ───────────────────────────────────────────────────────────────────────
 
 def fetch_now() -> str | None:
     req = urllib.request.Request(NOW_API, headers={"User-Agent": "Mozilla/5.0"})
@@ -52,6 +74,73 @@ def fetch_now() -> str | None:
         print(f"warning: could not fetch now content: {exc}")
         return None
 
+
+# ── github activity ───────────────────────────────────────────────────────────
+
+def fetch_github_activity(token: str | None) -> list[str]:
+    try:
+        data = gh_request(
+            f"https://api.github.com/users/{GITHUB_USER}/events/public", token
+        )
+        events = json.loads(data)
+    except Exception as exc:
+        print(f"warning: could not fetch GitHub activity: {exc}")
+        return []
+
+    profile_repo = f"{GITHUB_USER}/{GITHUB_USER}"
+    items: list[str] = []
+
+    for event in events:
+        if len(items) >= MAX_ACTIVITY:
+            break
+
+        etype = event.get("type", "")
+        if etype in SKIP_EVENTS:
+            continue
+
+        repo_full = event.get("repo", {}).get("name", "")
+        if repo_full == profile_repo:
+            continue
+
+        repo = repo_full.split("/")[-1]
+        repo_url = f"https://github.com/{repo_full}"
+        payload = event.get("payload", {})
+
+        if etype == "PushEvent":
+            commits = payload.get("commits", [])
+            if not commits:
+                continue
+            msg = commits[-1].get("message", "").split("\n")[0][:72]
+            items.append(f"Pushed to [{repo}]({repo_url}) — {msg}")
+
+        elif etype == "PullRequestEvent":
+            pr = payload.get("pull_request", {})
+            if payload.get("action") == "closed" and pr.get("merged"):
+                title = pr.get("title", "")[:72]
+                pr_url = pr.get("html_url", repo_url)
+                items.append(f"Merged [{title}]({pr_url}) in `{repo}`")
+
+        elif etype == "CreateEvent":
+            if payload.get("ref_type") == "repository":
+                desc = payload.get("description") or ""
+                suffix = f" — {desc[:60]}" if desc else ""
+                items.append(f"Created [{repo}]({repo_url}){suffix}")
+
+        elif etype == "ReleaseEvent":
+            tag = payload.get("release", {}).get("tag_name", "")
+            items.append(f"Released `{tag}` in [{repo}]({repo_url})")
+
+        elif etype == "IssuesEvent":
+            issue = payload.get("issue", {})
+            if payload.get("action") == "opened":
+                title = issue.get("title", "")[:72]
+                issue_url = issue.get("html_url", repo_url)
+                items.append(f"Opened issue [{title}]({issue_url}) in `{repo}`")
+
+    return items
+
+
+# ── posts ─────────────────────────────────────────────────────────────────────
 
 def fetch_posts(feed_url: str) -> list[dict]:
     req = urllib.request.Request(feed_url, headers={"User-Agent": "Mozilla/5.0"})
@@ -73,6 +162,11 @@ def fetch_posts(feed_url: str) -> list[dict]:
     return posts
 
 
+# ── main ──────────────────────────────────────────────────────────────────────
+
+token = os.environ.get("GITHUB_TOKEN")
+
+# Posts
 all_posts: list[dict] = []
 seen_titles: list[str] = []
 
@@ -86,31 +180,45 @@ for url in FEEDS:
         print(f"warning: could not fetch {url}: {exc}")
 
 all_posts.sort(key=lambda p: p["date"], reverse=True)
-lines = [f'- [{p["title"]}]({p["link"]})' for p in all_posts[:MAX_POSTS]]
+post_lines = [f'- [{p["title"]}]({p["link"]})' for p in all_posts[:MAX_POSTS]]
 
+# GitHub activity
+activity_lines = [f"- {item}" for item in fetch_github_activity(token)]
+
+# Now
+now_text = fetch_now()
+
+# Write README
 with open(README) as f:
     content = f.read()
 
-updated = re.sub(
+content = re.sub(
     rf"{re.escape(START)}.*?{re.escape(END)}",
-    f"{START}\n" + "\n".join(lines) + f"\n{END}",
-    content,
-    flags=re.DOTALL,
+    f"{START}\n" + "\n".join(post_lines) + f"\n{END}",
+    content, flags=re.DOTALL,
 )
 
-now_text = fetch_now()
+if activity_lines:
+    content = re.sub(
+        rf"{re.escape(REC_START)}.*?{re.escape(REC_END)}",
+        f"{REC_START}\n" + "\n".join(activity_lines) + f"\n{REC_END}",
+        content, flags=re.DOTALL,
+    )
+    print(f"updated recently: {len(activity_lines)} events")
+else:
+    print("skipped recently (no activity fetched)")
+
 if now_text:
-    updated = re.sub(
+    content = re.sub(
         rf"{re.escape(NOW_START)}.*?{re.escape(NOW_END)}",
         f"{NOW_START}\n{now_text}\n{NOW_END}",
-        updated,
-        flags=re.DOTALL,
+        content, flags=re.DOTALL,
     )
     print("updated now section")
 else:
     print("skipped now section (api unavailable)")
 
 with open(README, "w") as f:
-    f.write(updated)
+    f.write(content)
 
-print(f"wrote {len(lines)} posts to README")
+print(f"wrote {len(post_lines)} posts to README")
