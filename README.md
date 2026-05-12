@@ -23,9 +23,4 @@ Working on a MILP-based least-cost routing system across a $3.35B/month transact
 ### Writing
 
 <!-- BLOG-POST-LIST:START -->
-- [Autoregressive Decoding: The Loop That Determines Your Serving Architecture](https://bhuvanchennoju.com/posts/autoregressive-decoding-the-loop-that-determines-your-serving-architecture)
-- [KV Cache: Intuition, Implementation, Production](https://bhuvanchennoju.com/posts/kv-cache-intuition-implementation-production)
-- [Building a Local RAG System for Private Document Interaction](https://bhuvanchennoju.com/posts/local-rag-private-documents)
-- [RAG vs Fine-tuning: How to Make a Base LLM Context-Aware](https://bhuvanchennoju.com/posts/rag-vs-finetuning)
-- [Async Web Scraping at Scale: Curating NeurIPS Papers](https://bhuvanchennoju.com/posts/neurips-async-scraper)
 <!-- BLOG-POST-LIST:END -->

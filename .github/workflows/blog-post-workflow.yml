@@ -1,5 +1,9 @@
-name: Latest blog post workflow
+name: Update writing section
 on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - README.md
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
@@ -7,15 +11,21 @@ permissions:
   contents: write
 
 jobs:
-  update-readme-with-blog:
-    name: Update README with latest posts
+  update-posts:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Fetch latest posts
-        uses: gautamkrishnar/blog-post-workflow@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          feed_list: "https://bhuvanchennoju.com/rss.xml,https://medium.com/feed/@bhuvanchennoju"
-          max_post_count: 5
+          python-version: '3.12'
+      - run: python .github/scripts/update_posts.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet README.md; then
+            git add README.md
+            git commit -m "chore: update writing section"
+            git push
+          fi
 
