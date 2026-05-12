@@ -11,6 +11,9 @@ Building production ML systems at T-Mobile — fraud detection, LLM agents, and 
 ### Now
 
 <!-- NOW:START -->
+Day job: fraud ML, LLM agents, and payment optimization at T-Mobile.
+
+Nights and weekends: writing what I learn, experimenting with Claude Code, and reading everything I can about how models actually run at inference time.
 <!-- NOW:END -->
 
 ### Recently
