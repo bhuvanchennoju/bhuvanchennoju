@@ -19,6 +19,9 @@ Nights and weekends: writing what I learn, experimenting with Claude Code, and r
 ### Recently
 
 <!-- RECENTLY:START -->
+- Pushed to [how_ml_actually_works](https://github.com/bhuvanchennoju/how_ml_actually_works)
+- Pushed to [Claude_Worklog_setup](https://github.com/bhuvanchennoju/Claude_Worklog_setup)
+- Pushed to [DDP_from_scratch](https://github.com/bhuvanchennoju/DDP_from_scratch)
 <!-- RECENTLY:END -->
 
 ---
