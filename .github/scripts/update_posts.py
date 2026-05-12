@@ -80,7 +80,8 @@ def fetch_now() -> str | None:
 def fetch_github_activity(token: str | None) -> list[str]:
     try:
         data = gh_request(
-            f"https://api.github.com/users/{GITHUB_USER}/events/public", token
+            f"https://api.github.com/users/{GITHUB_USER}/events/public?per_page=100",
+            token,
         )
         events = json.loads(data)
     except Exception as exc:
@@ -89,6 +90,7 @@ def fetch_github_activity(token: str | None) -> list[str]:
 
     profile_repo = f"{GITHUB_USER}/{GITHUB_USER}"
     items: list[str] = []
+    seen_repos: set[str] = set()
 
     for event in events:
         if len(items) >= MAX_ACTIVITY:
@@ -105,37 +107,36 @@ def fetch_github_activity(token: str | None) -> list[str]:
         repo = repo_full.split("/")[-1]
         repo_url = f"https://github.com/{repo_full}"
         payload = event.get("payload", {})
+        item: str | None = None
 
-        if etype == "PushEvent":
+        if etype == "PushEvent" and repo_full not in seen_repos:
+            ref = payload.get("ref", "").split("/")[-1]
+            branch = f" on `{ref}`" if ref and ref not in ("master", "main") else ""
             commits = payload.get("commits", [])
-            if not commits:
-                continue
-            msg = commits[-1].get("message", "").split("\n")[0][:72]
-            items.append(f"Pushed to [{repo}]({repo_url}) — {msg}")
+            msg = f" — {commits[0]['message'].split(chr(10))[0][:60]}" if commits else ""
+            item = f"Pushed to [{repo}]({repo_url}){branch}{msg}"
 
         elif etype == "PullRequestEvent":
             pr = payload.get("pull_request", {})
             if payload.get("action") == "closed" and pr.get("merged"):
-                title = pr.get("title", "")[:72]
-                pr_url = pr.get("html_url", repo_url)
-                items.append(f"Merged [{title}]({pr_url}) in `{repo}`")
+                title = (pr.get("title") or "")[:72]
+                item = f"Merged [{title}]({pr.get('html_url', repo_url)}) in `{repo}`"
 
-        elif etype == "CreateEvent":
-            if payload.get("ref_type") == "repository":
+        elif etype == "CreateEvent" and repo_full not in seen_repos:
+            ref_type = payload.get("ref_type", "")
+            ref = payload.get("ref") or ""
+            if ref_type == "repository" or (ref_type == "branch" and ref in ("main", "master")):
                 desc = payload.get("description") or ""
                 suffix = f" — {desc[:60]}" if desc else ""
-                items.append(f"Created [{repo}]({repo_url}){suffix}")
+                item = f"Created [{repo}]({repo_url}){suffix}"
 
         elif etype == "ReleaseEvent":
-            tag = payload.get("release", {}).get("tag_name", "")
-            items.append(f"Released `{tag}` in [{repo}]({repo_url})")
+            tag = (payload.get("release") or {}).get("tag_name", "")
+            item = f"Released `{tag}` in [{repo}]({repo_url})"
 
-        elif etype == "IssuesEvent":
-            issue = payload.get("issue", {})
-            if payload.get("action") == "opened":
-                title = issue.get("title", "")[:72]
-                issue_url = issue.get("html_url", repo_url)
-                items.append(f"Opened issue [{title}]({issue_url}) in `{repo}`")
+        if item:
+            seen_repos.add(repo_full)
+            items.append(item)
 
     return items
 
