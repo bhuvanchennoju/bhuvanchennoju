@@ -29,9 +29,8 @@ Nights and weekends: writing what I learn, experimenting with Claude Code, and r
 ### Writing
 
 <!-- BLOG-POST-LIST:START -->
-- [Tokenization - 1: Why the First Step Shapes Everything](https://bhuvanchennoju.com/posts/tokenization-why-the-first-step-shapes-everything)
-- [Autoregressive Decoding: The Loop That Determines Your Serving Architecture](https://bhuvanchennoju.com/posts/autoregressive-decoding-the-loop-that-determines-your-serving-architecture)
-- [KV Cache: Intuition, Implementation, Production](https://bhuvanchennoju.com/posts/kv-cache-intuition-implementation-production)
-- [Building a Local RAG System for Private Document Interaction](https://bhuvanchennoju.com/posts/local-rag-private-documents)
-- [RAG vs Fine-tuning: How to Make a Base LLM Context-Aware](https://bhuvanchennoju.com/posts/rag-vs-finetuning)
+- [Tokenization -1: Why the First Step Shapes Everything](https://bhuvanchennoju.medium.com/tokenization-1-why-the-first-step-shapes-everything-987d6982858f)
+- [How do you build a local RAG system for private document interaction?](https://bhuvanchennoju.medium.com/how-do-you-build-a-local-rag-system-for-private-document-interaction-a3d81d9dcefc)
+- [RAG: How to Make a Base LLM Context-Aware on Private Data??](https://bhuvanchennoju.medium.com/rag-how-to-make-a-base-llm-context-aware-on-private-data-de16688d78b9)
+- [Asynchronous Data Scraper: NeurIPS Conference Data Curation Project](https://bhuvanchennoju.medium.com/asynchronous-data-scraper-neurips-conference-data-curation-project-ac2b7a816d6c)
 <!-- BLOG-POST-LIST:END -->
